@@ -17,6 +17,19 @@ function buildProxyConfig(host) {
     };
 }
 
+async function checkProxyConnection() {
+    try {
+        const response = await fetch('https://www.google.com/generate_204');
+        if (response.ok) {
+            chrome.action.setBadgeText({ text: 'ON' });
+        } else {
+            chrome.action.setBadgeText({ text: 'OFF' });
+        }
+    } catch (err) {
+        chrome.action.setBadgeText({ text: 'OFF' });
+    }
+}
+
 function setProxy(enable) {
     chrome.storage.sync.get({ proxyHost: '' }, (data) => {
         const host = data.proxyHost;
@@ -25,7 +38,7 @@ function setProxy(enable) {
             chrome.proxy.settings.set(
                 { value: directConfig, scope: "regular" },
                 () => {
-                    chrome.action.setBadgeText({ text: "OFF" });
+                    chrome.action.setBadgeText({ text: 'OFF' });
                 }
             );
             return;
@@ -34,10 +47,14 @@ function setProxy(enable) {
         chrome.proxy.settings.set(
             {
                 value: enable ? proxyConfig : directConfig,
-                scope: "regular"
+                scope: 'regular'
             },
             () => {
-                chrome.action.setBadgeText({ text: enable ? "ON" : "OFF" });
+                if (enable) {
+                    checkProxyConnection();
+                } else {
+                    chrome.action.setBadgeText({ text: 'OFF' });
+                }
             }
         );
     });
