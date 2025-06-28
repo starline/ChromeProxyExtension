@@ -18,7 +18,7 @@ function buildProxyConfig(host) {
 }
 
 function setProxy(enable) {
-  chrome.storage.sync.get({ proxyHost: '195.189.226.180' }, (data) => {
+  chrome.storage.sync.get({ proxyHost: '' }, (data) => {
     const proxyConfig = buildProxyConfig(data.proxyHost);
     chrome.proxy.settings.set(
       {
@@ -36,7 +36,7 @@ function setProxy(enable) {
 setProxy(proxyEnabled);
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.get({ proxyHost: '195.189.226.180' }, (data) => {
+  chrome.storage.sync.get({ proxyHost: '' }, (data) => {
     chrome.storage.sync.set({ proxyHost: data.proxyHost }, () => {
       setProxy(true);
     });

@@ -1,6 +1,6 @@
 // Load the stored proxy host and populate the input field
 function restoreOptions() {
-  chrome.storage.sync.get({ proxyHost: '195.189.226.180' }, (data) => {
+  chrome.storage.sync.get({ proxyHost: '' }, (data) => {
     document.getElementById('host').value = data.proxyHost;
   });
 }
