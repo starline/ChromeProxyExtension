@@ -1,37 +1,46 @@
 
 let proxyEnabled = true;
 
-const proxyConfig = {
-  mode: "fixed_servers",
-  rules: {
-    singleProxy: {
-      scheme: "http",
-      host: "195.189.226.180",
-      port: 3128
-    },
-    bypassList: ["<local>"]
-  }
-};
-
 const directConfig = { mode: "direct" };
 
-function setProxy(enable) {
-  chrome.proxy.settings.set(
-    {
-      value: enable ? proxyConfig : directConfig,
-      scope: "regular"
-    },
-    () => {
-      chrome.action.setBadgeText({ text: enable ? "ON" : "OFF" });
+function buildProxyConfig(host) {
+  return {
+    mode: "fixed_servers",
+    rules: {
+      singleProxy: {
+        scheme: "http",
+        host: host,
+        port: 3128
+      },
+      bypassList: ["<local>"]
     }
-  );
+  };
+}
+
+function setProxy(enable) {
+  chrome.storage.sync.get({ proxyHost: '195.189.226.180' }, (data) => {
+    const proxyConfig = buildProxyConfig(data.proxyHost);
+    chrome.proxy.settings.set(
+      {
+        value: enable ? proxyConfig : directConfig,
+        scope: "regular"
+      },
+      () => {
+        chrome.action.setBadgeText({ text: enable ? "ON" : "OFF" });
+      }
+    );
+  });
 }
 
 // Ensure the badge reflects the default state when the script loads
 setProxy(proxyEnabled);
 
 chrome.runtime.onInstalled.addListener(() => {
-  setProxy(true);
+  chrome.storage.sync.get({ proxyHost: '195.189.226.180' }, (data) => {
+    chrome.storage.sync.set({ proxyHost: data.proxyHost }, () => {
+      setProxy(true);
+    });
+  });
 });
 
 chrome.action.onClicked.addListener(() => {
