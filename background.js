@@ -1,5 +1,5 @@
 
-let proxyEnabled = true;
+let proxyEnabled = false;
 
 const directConfig = { mode: "direct" };
 
@@ -60,13 +60,17 @@ function setProxy(enable) {
     });
 }
 
-// Ensure the badge reflects the default state when the script loads
-setProxy(proxyEnabled);
+// Ensure the badge reflects the saved state when the script loads
+chrome.storage.sync.get({ autoStart: false, proxyHost: '' }, (data) => {
+    proxyEnabled = data.autoStart;
+    setProxy(proxyEnabled);
+});
 
 chrome.runtime.onInstalled.addListener(() => {
-    chrome.storage.sync.get({ proxyHost: '' }, (data) => {
-        chrome.storage.sync.set({ proxyHost: data.proxyHost }, () => {
-            setProxy(true);
+    chrome.storage.sync.get({ proxyHost: '', autoStart: false }, (data) => {
+        chrome.storage.sync.set({ proxyHost: data.proxyHost, autoStart: data.autoStart }, () => {
+            proxyEnabled = data.autoStart;
+            setProxy(proxyEnabled);
         });
     });
 });
