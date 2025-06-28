@@ -27,6 +27,9 @@ function setProxy(enable) {
   );
 }
 
+// Ensure the badge reflects the default state when the script loads
+setProxy(proxyEnabled);
+
 chrome.runtime.onInstalled.addListener(() => {
   setProxy(true);
 });
