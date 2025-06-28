@@ -18,8 +18,19 @@ function buildProxyConfig(host) {
 }
 
 function setProxy(enable) {
-  chrome.storage.sync.get({ proxyHost: '195.189.226.180' }, (data) => {
-    const proxyConfig = buildProxyConfig(data.proxyHost);
+  chrome.storage.sync.get({ proxyHost: '' }, (data) => {
+    const host = data.proxyHost;
+    if (!host) {
+      // No host configured; fall back to direct connection
+      chrome.proxy.settings.set(
+        { value: directConfig, scope: "regular" },
+        () => {
+          chrome.action.setBadgeText({ text: "OFF" });
+        }
+      );
+      return;
+    }
+    const proxyConfig = buildProxyConfig(host);
     chrome.proxy.settings.set(
       {
         value: enable ? proxyConfig : directConfig,
@@ -36,7 +47,7 @@ function setProxy(enable) {
 setProxy(proxyEnabled);
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.get({ proxyHost: '195.189.226.180' }, (data) => {
+  chrome.storage.sync.get({ proxyHost: '' }, (data) => {
     chrome.storage.sync.set({ proxyHost: data.proxyHost }, () => {
       setProxy(true);
     });
