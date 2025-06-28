@@ -1,0 +1,19 @@
+
+{
+  "manifest_version": 3,
+  "name": "Proxy Injector V3",
+  "version": "1.0",
+  "permissions": [
+    "proxy",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Toggle Proxy"
+  }
+}
