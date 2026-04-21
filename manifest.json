@@ -11,10 +11,10 @@
     "<all_urls>"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "src/background/service-worker.js"
   },
   "options_ui": {
-    "page": "options.html",
+    "page": "src/options/options.html",
     "open_in_tab": false
   },
   "action": {

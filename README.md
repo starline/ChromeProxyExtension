@@ -27,11 +27,12 @@ If no host is set, the extension keeps a direct connection and does not enable t
 
 ## Project layout
 
-| File | Purpose |
+| Path | Purpose |
 |------|---------|
 | `manifest.json` | MV3 manifest, `proxy` and `storage` permissions, service worker |
-| `background.js` | Proxy logic, click-to-toggle, connection check |
-| `options.html` / `options.js` | Options page for host and auto-start |
+| `src/background/service-worker.js` | Proxy logic, click-to-toggle, connection check |
+| `src/options/options.html` / `options.js` | Options page for host and auto-start |
+| `assets/icons/` | Placeholder for extension icons (optional) |
 
 ## Requirements
 
@@ -39,4 +40,4 @@ If no host is set, the extension keeps a direct connection and does not enable t
 
 ## Note
 
-Proxy port **3128** and scheme **http** are defined in `background.js` in `buildProxyConfig`. To use a different port or proxy type, edit the code accordingly.
+Proxy port **3128** and scheme **http** are defined in `src/background/service-worker.js` in `buildProxyConfig`. To use a different port or proxy type, edit the code accordingly.
